@@ -22,6 +22,7 @@ import {
   type SpecResponse,
 } from '@ecash-connect/core';
 import { deriveAccount, newMnemonic } from '../src/wallet/keys';
+import { devnet } from './devnet-helper';
 import { WalletService, type KV, type Pending } from '../src/wallet/service';
 
 const ESPLORA = 'http://127.0.0.1:3002';
@@ -50,11 +51,6 @@ const svc = new WalletService({
 });
 const esplora = new Esplora(ESPLORA);
 
-function devnet(...args: string[]): string {
-  const r = Bun.spawnSync(['wsl', '-d', 'Debian', '--', 'bash', '/mnt/c/Users/roota/dev/ecash-connect/apps/extension/test/devnet.sh', ...args]);
-  if (r.exitCode !== 0) throw new Error(`devnet ${args.join(' ')}: ${r.stderr.toString()}`);
-  return r.stdout.toString().trim();
-}
 
 async function waitFor(what: string, ok: () => Promise<boolean>, secs = 60) {
   for (let i = 0; i < secs * 2; i++) {

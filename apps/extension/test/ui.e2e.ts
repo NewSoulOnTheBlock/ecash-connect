@@ -15,6 +15,7 @@ import { join, resolve } from 'node:path';
 import { chromium, type BrowserContext, type Page } from 'playwright-core';
 import { base58 } from '@scure/base';
 import { formatDepositAddress, getCtip } from '@ecash-connect/core';
+import { devnet } from './devnet-helper';
 
 const ROOT = resolve(import.meta.dir, '..', '..', '..');
 const EXT = join(ROOT, 'apps', 'extension', 'dist');
@@ -26,11 +27,6 @@ const PASSWORD = 'meow meow meow';
 
 mkdirSync(SHOTS, { recursive: true });
 
-function devnet(...args: string[]): string {
-  const r = Bun.spawnSync(['wsl', '-d', 'Debian', '--', 'bash', '/mnt/c/Users/roota/dev/ecash-connect/apps/extension/test/devnet.sh', ...args]);
-  if (r.exitCode !== 0) throw new Error(`devnet ${args.join(' ')}: ${r.stderr.toString()}`);
-  return r.stdout.toString().trim();
-}
 
 let n = 0;
 function ok(msg: string) {

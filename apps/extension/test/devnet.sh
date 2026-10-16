@@ -4,7 +4,10 @@
 #   devnet.sh mine [n]                mine n L1 blocks through the enforcer
 #   devnet.sh describe                print the SendTransaction request shape
 set -euo pipefail
-DEVNET=${DEVNET:-/mnt/c/Users/roota/dev/ecash-cat-chain/devnet}
+# DEVNET: the eCash Cat devnet scripts directory (provides lib.sh: grpc, mine_l1).
+# Default: an ecash-cat-chain checkout next to this repo.
+DEVNET=${DEVNET:-$(cd "$(dirname "$0")/../../ecash-cat-chain/devnet" 2>/dev/null && pwd)}
+[[ -f "$DEVNET/lib.sh" ]] || { echo "set DEVNET to the eCash Cat devnet scripts directory" >&2; exit 2; }
 # shellcheck source=/dev/null
 source "$DEVNET/lib.sh"
 
