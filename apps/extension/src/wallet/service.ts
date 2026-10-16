@@ -202,15 +202,15 @@ export class WalletService {
     const words = normalizeMnemonic(mnemonic);
     const accounts: Accounts = {};
     for (const n of Object.values(EcashNetworkType)) accounts[n] = publicPart(deriveAccount(words, n));
-    const replacing = !!(await this.d.local.get('vault'));
+    // A new seed means new addresses: connected sites are told, then forgotten.
+    if (await this.d.local.get('vault')) {
+      this.d.emit('*', { type: 'disconnect' });
+      await this.d.local.set('sites', {});
+    }
     await this.d.local.set('vault', await sealVault(words, password));
     await this.d.local.set('accounts', accounts);
     await this.d.session.set('mnemonic', words);
     await this.d.session.set('lastActive', this.now());
-    if (replacing) {
-      await this.d.local.set('sites', {});
-      this.d.emit('*', { type: 'disconnect' });
-    }
   }
 
   async unlock(password: string): Promise<boolean> {

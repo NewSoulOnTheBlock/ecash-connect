@@ -89,10 +89,14 @@ export class Wallet {
       else {
         try {
           await this.selectProvider();
-        } catch {
+        } catch (e) {
+          // The selector rejects with nothing on cancel; selectProvider throws when no wallet exists.
+          const noWallet = e instanceof Error;
           return {
             status: 'error',
-            error: { code: RpcErrorCode.USER_REJECTION, message: 'No wallet was selected.' },
+            error: noWallet
+              ? { code: RpcErrorCode.INTERNAL_ERROR, message: 'No eCash wallet is installed. Install one (for example eCash Cat Wallet), then reload this page.' }
+              : { code: RpcErrorCode.USER_REJECTION, message: 'The wallet picker was closed without choosing a wallet.' },
           };
         }
       }

@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>eCash Connect Demo</title>
+<style>
+  :root {
+    --bg: #0b0b0c; --panel: #151413; --ink: #f4f1ea; --muted: #8f8b83;
+    --line: rgba(255,255,255,.08); --amber: #f5a623; --red: #ef6a55; --green: #5fd38d;
+    --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.5 system-ui, -apple-system, Segoe UI, sans-serif; }
+  main { max-width: 760px; margin: 0 auto; padding: 32px 16px 64px; display: grid; gap: 16px; }
+  h1 { margin: 0; font-size: 28px; }
+  h1 em { color: var(--amber); font-style: normal; }
+  h2 { margin: 0; font-size: 16px; }
+  p { margin: 0; color: var(--muted); }
+  section { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 16px; display: grid; gap: 10px; min-width: 0; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+  label { display: grid; gap: 4px; font-size: 13px; color: var(--muted); }
+  input, select { background: #1d1b19; color: var(--ink); border: 1px solid var(--line); border-radius: 9px; padding: 9px 10px; font: inherit; width: 100%; }
+  button { font: inherit; font-weight: 600; border-radius: 10px; padding: 10px 14px; border: 1px solid var(--line); background: #1d1b19; color: var(--ink); cursor: pointer; justify-self: start; }
+  button.primary { background: var(--amber); color: #16130f; border-color: transparent; }
+  button:disabled { opacity: .45; cursor: not-allowed; }
+  pre { margin: 0; background: #0f0e0d; border-radius: 10px; padding: 10px; font: 12px/1.5 var(--mono); white-space: pre-wrap; word-break: break-all; max-height: 260px; overflow: auto; }
+  .status { font-family: var(--mono); font-size: 13px; word-break: break-all; }
+  .ok { color: var(--green); } .err { color: var(--red); }
+</style>
+<script type="module" src="main.js"></script>
+</head>
+<body>
+<main>
+  <header>
+    <h1>eCash Connect <em>demo</em></h1>
+    <p>Every button is one <code>Wallet.request()</code> call to whichever eCash wallet you pick.</p>
+  </header>
+
+  <section>
+    <h2>1. Connect</h2>
+    <div class="status" id="who">Not connected.</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="primary" id="connect">Connect wallet</button>
+      <button id="balance" disabled>Get balance</button>
+      <button id="disconnect" disabled>Disconnect</button>
+    </div>
+  </section>
+
+  <div class="grid">
+    <section>
+      <h2>2. Sign a message</h2>
+      <label>Message<input id="message" value="I own this eCash address"></label>
+      <label>Format<select id="protocol"><option value="BIP322">BIP322</option><option value="ECDSA">ECDSA (BIP137)</option></select></label>
+      <button id="sign" disabled>Sign</button>
+    </section>
+
+    <section>
+      <h2>3. Send ECX</h2>
+      <label>To<input id="to" placeholder="bcrt1q…" spellcheck="false"></label>
+      <label>Amount (sats)<input id="amount" value="100000" inputmode="numeric"></label>
+      <button id="send" disabled>Send</button>
+    </section>
+
+    <section>
+      <h2>4. Deposit to a sidechain</h2>
+      <label>Sidechain<select id="slot"><option value="">Connect first</option></select></label>
+      <label>Sidechain address<input id="scaddr" placeholder="s77_… or bare address" spellcheck="false"></label>
+      <label>Amount (sats)<input id="depamount" value="1000000" inputmode="numeric"></label>
+      <button id="deposit" disabled>Deposit</button>
+    </section>
+  </div>
+
+  <section>
+    <h2>Log</h2>
+    <pre id="log">Waiting for you to connect.</pre>
+  </section>
+</main>
+</body>
+</html>

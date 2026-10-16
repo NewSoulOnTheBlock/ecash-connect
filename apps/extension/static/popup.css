@@ -1,0 +1,87 @@
+:root {
+  --bg: #0b0b0c;
+  --panel: #151413;
+  --panel-hi: #1d1b19;
+  --ink: #f4f1ea;
+  --muted: #8f8b83;
+  --line: rgba(255, 255, 255, 0.08);
+  --amber: #f5a623;
+  --amber-hi: #ffc35a;
+  --amber-soft: rgba(245, 166, 35, 0.12);
+  --red: #ef6a55;
+  --green: #5fd38d;
+  --mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  width: 360px;
+  min-height: 560px;
+  background: var(--bg);
+  color: var(--ink);
+  font: 14px/1.45 'Space Grotesk', system-ui, -apple-system, Segoe UI, sans-serif;
+}
+body.window { width: auto; }
+.top {
+  display: flex; align-items: center; gap: 8px;
+  padding: 12px 14px; border-bottom: 1px solid var(--line);
+}
+.logo { width: 26px; height: 26px; border-radius: 7px; }
+.brand { font-weight: 700; flex: 1; }
+select, input, textarea {
+  background: var(--panel-hi); color: var(--ink);
+  border: 1px solid var(--line); border-radius: 9px;
+  padding: 9px 10px; font: inherit; width: 100%;
+}
+select#network { width: auto; padding: 5px 8px; font-size: 12px; }
+input:focus, textarea:focus, select:focus { outline: 2px solid var(--amber); outline-offset: 0; border-color: transparent; }
+textarea { resize: vertical; min-height: 80px; font-family: var(--mono); font-size: 13px; }
+main { padding: 14px; display: grid; gap: 12px; }
+h1 { font-size: 18px; margin: 4px 0 0; }
+h2 { font-size: 13px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); margin: 6px 0 0; }
+p { margin: 0; color: var(--muted); }
+label { display: grid; gap: 5px; font-size: 12px; color: var(--muted); }
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; padding: 14px; display: grid; gap: 10px; }
+.balance { font-size: 28px; font-weight: 700; letter-spacing: -0.01em; }
+.balance small { font-size: 14px; color: var(--muted); font-weight: 500; }
+.pending { font-size: 12px; color: var(--amber-hi); }
+.addr { font-family: var(--mono); font-size: 12px; word-break: break-all; color: var(--ink); }
+.row { display: flex; gap: 8px; }
+.row > * { flex: 1; }
+button {
+  font: inherit; font-weight: 600; cursor: pointer;
+  border-radius: 10px; padding: 10px 12px;
+  border: 1px solid var(--line); background: var(--panel-hi); color: var(--ink);
+}
+button:hover:not(:disabled) { border-color: rgba(255, 255, 255, 0.2); }
+button.primary { background: var(--amber); color: #16130f; border-color: transparent; }
+button.primary:hover:not(:disabled) { background: var(--amber-hi); }
+button.danger { color: var(--red); }
+button.link { background: none; border: none; color: var(--amber); padding: 0; font-weight: 500; text-align: left; }
+button:disabled { opacity: 0.45; cursor: not-allowed; }
+.msg { font-size: 12px; color: var(--muted); }
+.msg.err { color: var(--red); }
+.msg.ok { color: var(--green); }
+.words { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; counter-reset: w; }
+.words span {
+  font-family: var(--mono); font-size: 12px; background: var(--panel-hi);
+  border-radius: 7px; padding: 6px 7px; counter-increment: w;
+}
+.words span::before { content: counter(w) '. '; color: var(--muted); }
+.kv { display: grid; gap: 8px; }
+.kv div { display: grid; gap: 2px; }
+.kv dt { font-size: 11px; color: var(--muted); }
+.kv dd { margin: 0; word-break: break-word; }
+.kv dd.mono { font-family: var(--mono); font-size: 12px; }
+.kv dd.good { color: var(--green); }
+.kv dd.warn { color: var(--amber-hi); }
+.kv dd.bad { color: var(--red); font-weight: 600; }
+.note { font-size: 12px; color: var(--muted); background: var(--amber-soft); border-radius: 10px; padding: 9px 10px; }
+.blocked { font-size: 13px; color: var(--red); background: rgba(239, 106, 85, 0.1); border-radius: 10px; padding: 10px; }
+.sites { display: grid; gap: 6px; }
+.site { display: flex; align-items: center; gap: 8px; font-size: 12px; }
+.site span { flex: 1; font-family: var(--mono); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.site button { padding: 4px 8px; font-size: 12px; }
+.tx { font-family: var(--mono); font-size: 11px; word-break: break-all; }
+.back { justify-self: start; }

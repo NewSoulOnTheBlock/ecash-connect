@@ -165,7 +165,7 @@ check(dep.result.treasuryValue === String((before?.value ?? 0n) + 25_000_000n), 
 await mineAndIndex(dep.result.txid);
 await waitFor('enforcer to see the deposit', async () => (await getCtip(ENFORCER, SLOT))?.txid === dep.result.txid, 30);
 const after = await getCtip(ENFORCER, SLOT);
-check(after?.txid === dep.result.txid && after.value === (before?.value ?? 0n) + 25_000_000n, `the enforcer accepted it as slot ${SLOT}'s new CTIP (${after?.value} sats)`);
+check(after?.txid === dep.result.txid && after!.value === (before?.value ?? 0n) + 25_000_000n, `the enforcer accepted it as slot ${SLOT}'s new CTIP (${after?.value} sats)`);
 const depTx = btc.Transaction.fromRaw(hexToBytes(dep.result.transaction), { allowUnknownInputs: true, allowUnknownOutputs: true });
 check(new TextDecoder().decode(depTx.getOutput(1).script!.slice(2)) === scAddr, 'OP_RETURN carries the bare sidechain address');
 
