@@ -5,8 +5,17 @@
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "exports": { ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js" } },
-  "files": ["dist"],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
   "license": "MIT",
   "scripts": {
     "build": "rm -rf dist && bun build src/index.ts --outdir dist --target browser --format esm --packages external && tsc -p . --emitDeclarationOnly --outDir dist"
@@ -14,5 +23,29 @@
   "dependencies": {
     "@ecash-connect/core": "workspace:*",
     "@ecash-connect/ui": "workspace:*"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NewSoulOnTheBlock/ecash-connect.git",
+    "directory": "packages/ecash-connect"
+  },
+  "homepage": "https://github.com/NewSoulOnTheBlock/ecash-connect/tree/main/packages/ecash-connect#readme",
+  "bugs": {
+    "url": "https://github.com/NewSoulOnTheBlock/ecash-connect/issues"
+  },
+  "keywords": [
+    "ecash",
+    "ecx",
+    "bitcoin",
+    "wallet",
+    "dapp",
+    "sats-connect",
+    "drivechain",
+    "bip300"
+  ],
+  "author": "eCash Cat contributors",
+  "sideEffects": false,
+  "publishConfig": {
+    "access": "public"
   }
 }

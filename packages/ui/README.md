@@ -1,11 +1,11 @@
-# `@sats-connect/ui`
+# `@ecash-connect/ui`
 
-A Bitcoin Web3 wallet provider selector. Built as a custom element, compatible with all major UI frameworks.
+A wallet selector for eCash (ECX) dapps, forked from [@sats-connect/ui](https://github.com/secretkeylabs/sats-connect-ui) (MIT, Secret Key Labs). Built as a custom element, compatible with all major UI frameworks.
 
 ## Basic usage
 
 ```ts
-import { loadSelector, selectWalletProvider } from "@sats-connect/ui";
+import { loadSelector, selectWalletProvider } from "@ecash-connect/ui";
 
 // Call this once in your app to load the custom element.
 loadSelector();
@@ -30,9 +30,9 @@ npm install
 npm run dev
 ```
 
-# Building the `@sats-connect/ui` package
+# Building the `@ecash-connect/ui` package
 
-To build the `@sats-connect/ui` package, run
+To build the `@ecash-connect/ui` package, run
 
 ```bash
 npm run build
@@ -48,7 +48,6 @@ npm run build-app
 
 ## Viewing the example app live
 
-The latest version of the example app is available at <https://sats-connect-ui.netlify.app>.
 
 # Docs
 

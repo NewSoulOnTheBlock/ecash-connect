@@ -5,13 +5,13 @@
     "packages/core",
     "packages/ui",
     "packages/ecash-connect",
-    "apps/extension",
     "apps/demo"
   ],
   "scripts": {
-    "build": "bun run --cwd packages/core build && bun run --cwd packages/ui build && bun run --cwd packages/ecash-connect build && bun run --cwd apps/extension build && bun run --cwd apps/demo build",
-    "test": "bun test packages apps",
-    "typecheck": "tsc -p packages/core --noEmit && tsc -p packages/ecash-connect --noEmit && tsc -p apps/extension --noEmit"
+    "build": "bun run --cwd packages/core build && bun run --cwd packages/ui build && bun run --cwd packages/ecash-connect build && bun run --cwd apps/demo build",
+    "test": "bun test packages",
+    "typecheck": "tsc -p packages/core --noEmit && tsc -p packages/ecash-connect --noEmit",
+    "demo": "bun run build && bun apps/demo/serve.ts"
   },
   "devDependencies": {
     "typescript": "5.9.2",

@@ -16,15 +16,15 @@ Events are used to interact with the selector.
 
 ### Listeners
 
-- **open** `"sats-connect_wallet-provider-selector_open"`: The selector will open and display the providers as configured using custom event's `details` property, which is expected to be of type [`Config`](../src/lib/utils.ts)
-- **close** `"sats-connect_wallet-provider-selector_close"`: The selector will close if open.
-- **wallet open** `"sats-connect_wallet-provider-selector_walletOpen"`: The third party interacting with the selector may optionally notify the selector when the user has their wallet open or visible. The selector will display a message indicating that an operation is in progress.
-- **wallet close** `"sats-connect_wallet-provider-selector_walletClose"`. The third party interacting with the selector may optionally notify when the user has closed their wallet or it is no longer visible. The selector will stop showing that an operation is in progress if it previously received a "wallet open" event.
+- **open** `"ecash-connect_wallet-provider-selector_open"`: The selector will open and display the providers as configured using custom event's `details` property, which is expected to be of type [`Config`](../src/lib/utils.ts)
+- **close** `"ecash-connect_wallet-provider-selector_close"`: The selector will close if open.
+- **wallet open** `"ecash-connect_wallet-provider-selector_walletOpen"`: The third party interacting with the selector may optionally notify the selector when the user has their wallet open or visible. The selector will display a message indicating that an operation is in progress.
+- **wallet close** `"ecash-connect_wallet-provider-selector_walletClose"`. The third party interacting with the selector may optionally notify when the user has closed their wallet or it is no longer visible. The selector will stop showing that an operation is in progress if it previously received a "wallet open" event.
 
 ### Emitted events
 
-- **select**: `"sats-connect_wallet-provider-selector_select"`: Emitted when the user selects a provider. The selected provider ID is in the custom event's `details` property.
-- **cancel** `"sats-connect_wallet-provider-selector_cancel"`: Emitted when the user closes the selector.
+- **select**: `"ecash-connect_wallet-provider-selector_select"`: Emitted when the user selects a provider. The selected provider ID is in the custom event's `details` property.
+- **cancel** `"ecash-connect_wallet-provider-selector_cancel"`: Emitted when the user closes the selector.
 
 ## Request flow
 

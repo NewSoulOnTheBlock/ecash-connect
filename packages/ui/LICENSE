@@ -1,6 +1,8 @@
 MIT License
 
-Copyright (c) 2025 Secret Key Labs
+Copyright (c) 2026 eCash Cat contributors
+Copyright (c) 2025 Secret Key Labs (sats-connect, sats-connect-core, sats-connect-ui,
+from which packages/core, packages/ui and packages/ecash-connect are derived)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

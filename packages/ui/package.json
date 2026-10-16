@@ -4,7 +4,9 @@
   "type": "module",
   "main": "dist/index.js",
   "files": [
-    "dist"
+    "dist",
+    "README.md",
+    "LICENSE"
   ],
   "scripts": {
     "dev": "vite",
@@ -31,5 +33,28 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
     }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NewSoulOnTheBlock/ecash-connect.git",
+    "directory": "packages/ui"
+  },
+  "homepage": "https://github.com/NewSoulOnTheBlock/ecash-connect/tree/main/packages/ui#readme",
+  "bugs": {
+    "url": "https://github.com/NewSoulOnTheBlock/ecash-connect/issues"
+  },
+  "keywords": [
+    "ecash",
+    "ecx",
+    "wallet",
+    "selector",
+    "sats-connect"
+  ],
+  "author": "eCash Cat contributors",
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "publishConfig": {
+    "access": "public"
   }
 }
