@@ -103,15 +103,19 @@ const internal: Record<string, (a: any) => Promise<unknown> | unknown> = {
   rpc: (a: { method: string; params: unknown }) => wallet.handle(WALLET_ORIGIN, a.method, a.params, 'popup'),
 };
 
-const extensionOrigin = new URL(chrome.runtime.getURL('')).origin;
+// Not `new URL(...).origin`: for chrome-extension: URLs that is the string
+// "null" (WHATWG only computes origins for special schemes), while Chrome
+// reports `sender.origin` as "chrome-extension://<id>".
+const extensionBase = chrome.runtime.getURL('');
+const extensionOrigin = extensionBase.replace(/\/$/, '');
 
 chrome.runtime.onMessage.addListener((msg: any, sender, sendResponse) => {
   if (sender.id !== chrome.runtime.id) return false;
   // Judged by the sender's URL, not by `sender.tab`: an approval window is a
   // popup window, and the page in it counts as a tab. Content scripts always
   // report the web page's URL, so they can never pass this.
+  const fromExtensionPage = sender.origin === extensionOrigin || (!sender.origin && !!sender.url?.startsWith(extensionBase));
   const senderOrigin = sender.origin ?? (sender.url ? new URL(sender.url).origin : undefined);
-  const fromExtensionPage = senderOrigin === extensionOrigin;
 
   if (fromExtensionPage && msg?.type === 'internal') {
     const fn = internal[msg.call];
