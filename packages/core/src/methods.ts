@@ -191,7 +191,7 @@ export type RpcSuccessResponseResult<M extends Method> = RpcResult<M>;
 export const METHOD_NAMES = Object.keys(methods) as Method[];
 
 /** Methods a site may call before the user has connected it. */
-export const PUBLIC_METHODS: readonly Method[] = ['getInfo', 'wallet_connect', 'getAddresses'];
+export const PUBLIC_METHODS: readonly Method[] = ['getInfo', 'wallet_connect', 'getAddresses', 'wallet_getCurrentPermissions'];
 
 export function isMethod(name: unknown): name is Method {
   return typeof name === 'string' && Object.hasOwn(methods, name);

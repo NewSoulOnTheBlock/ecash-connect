@@ -380,8 +380,21 @@ async function approvalView(id: string, standalone: boolean) {
 // While this page is open, an open port (plus a heartbeat) keeps the service
 // worker alive, so a request waiting on the user is not lost to the ~30 s
 // idle stop. For the toolbar popup, closing it also rejects its own requests.
-const uiPort = chrome.runtime.connect({ name: UI_PORT });
-setInterval(() => uiPort.postMessage({ type: 'ping' }), 20_000);
+let uiPort: chrome.runtime.Port | null = null;
+function connectUi() {
+  uiPort = chrome.runtime.connect({ name: UI_PORT });
+  // A restarted service worker drops the port; posting on it would throw.
+  uiPort.onDisconnect.addListener(() => (uiPort = null));
+}
+connectUi();
+setInterval(() => {
+  try {
+    if (!uiPort) connectUi();
+    uiPort!.postMessage({ type: 'ping' });
+  } catch {
+    uiPort = null;
+  }
+}, 20_000);
 
 const showError = (e: unknown) => show(h('div', { class: 'blocked' }, (e as Error).message), approveId && h('button', { onclick: () => window.close() }, 'Close'));
 const approveId = /^#approve=([\w-]+)$/.exec(location.hash)?.[1];
