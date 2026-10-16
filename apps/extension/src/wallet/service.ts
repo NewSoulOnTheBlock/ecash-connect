@@ -293,7 +293,15 @@ export class WalletService {
       if (!isMethod(method)) fail(RpcErrorCode.METHOD_NOT_FOUND, `Unknown method ${String(method)}`);
       const m = method as Method;
       const parsed = parseParams(m, params);
-      if (!parsed.success) fail(RpcErrorCode.INVALID_PARAMS, parsed.issues.map((i) => i.message).join('; '));
+      if (!parsed.success) {
+        // "sidechainAddress: is empty" reads better than valibot's "Invalid length: Expected >=1 but received 0".
+        const why = parsed.issues.map((i) => {
+          const field = i.path?.map((p) => String(p.key)).join('.') || 'params';
+          const empty = i.type === 'min_length' && (i.input === '' || (Array.isArray(i.input) && !i.input.length));
+          return `${field}: ${empty ? 'is empty' : i.message}`;
+        });
+        fail(RpcErrorCode.INVALID_PARAMS, why.join('; '));
+      }
       if (origin !== WALLET_ORIGIN && !PUBLIC_METHODS.includes(m) && !(await this.sites())[origin]) {
         fail(RpcErrorCode.ACCESS_DENIED, 'Connect to the wallet first (wallet_connect or getAddresses).');
       }
