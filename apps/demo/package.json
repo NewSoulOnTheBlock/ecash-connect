@@ -1,0 +1,8 @@
+{
+  "name": "ecash-connect-demo",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": { "build": "bun build src/main.ts --outdir dist --target browser --format esm && cp index.html dist/" },
+  "dependencies": { "ecash-connect": "workspace:*" }
+}
