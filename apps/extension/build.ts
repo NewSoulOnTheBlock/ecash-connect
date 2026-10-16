@@ -14,6 +14,7 @@ async function bundle(entry: string, format: 'esm' | 'iife') {
     target: 'browser',
     format,
     minify: false,
+    define: { __BUILD__: JSON.stringify(new Date().toISOString().slice(0, 19).replace('T', ' ')) },
     sourcemap: 'none',
   });
   if (!r.success) {

@@ -267,8 +267,18 @@ export class WalletService {
     return { confirmed: String(confirmed), unconfirmed: String(unconfirmed), total: String(confirmed + unconfirmed) };
   }
 
-  getPending(id: string): Pending | undefined {
-    return this.pending.get(id);
+  /**
+   * A request awaiting the user. One found only in session storage outlived
+   * the worker that was waiting on it: it is shown as expired, since nobody
+   * can receive the answer any more.
+   */
+  async getPending(id: string): Promise<(Pending & { expired?: boolean }) | null> {
+    const live = this.pending.get(id);
+    if (live) return live;
+    const stored = await this.d.session.get<Pending>(`pending:${id}`);
+    if (!stored) return null;
+    await this.d.session.remove(`pending:${id}`);
+    return { ...stored, expired: true };
   }
 
   listPending(): Pending[] {
@@ -337,11 +347,13 @@ export class WalletService {
   private async approve(p: Omit<Pending, 'id' | 'createdAt'>): Promise<void> {
     const pending: Pending = { ...p, id: crypto.randomUUID(), createdAt: this.now() };
     this.pending.set(pending.id, pending);
+    await this.d.session.set(`pending:${pending.id}`, pending);
     let ok = false;
     try {
       ok = await this.d.ask(pending);
     } finally {
       this.pending.delete(pending.id);
+      await this.d.session.remove(`pending:${pending.id}`);
     }
     if (!ok) fail(RpcErrorCode.USER_REJECTION, 'The user rejected the request.');
     if (pending.blocked) fail(RpcErrorCode.INVALID_REQUEST, pending.blocked);

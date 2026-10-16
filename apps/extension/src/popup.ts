@@ -5,13 +5,14 @@
  * send/deposit.
  */
 import { EcashNetworkType, type SidechainInfo } from '@ecash-connect/core';
+import { UI_PORT } from './shared';
 import type { Pending, WalletState } from './wallet/service';
 
 // ---- plumbing ----------------------------------------------------------------
 
 async function call<T = unknown>(name: string, args?: unknown): Promise<T> {
   const r = await chrome.runtime.sendMessage({ type: 'internal', call: name, args });
-  if (!r) throw new Error('The wallet did not answer. Try again.');
+  if (!r) throw new Error(`The wallet did not answer "${name}" (popup build ${__BUILD__}). Reload the extension on chrome://extensions and try again.`);
   if (r.error) throw new Error(r.error);
   return r.result as T;
 }
@@ -32,6 +33,9 @@ function h<K extends keyof HTMLElementTagNameMap>(tag: K, attrs: Record<string, 
   for (const c of children) if (c !== null && c !== undefined && c !== false) el.append(c);
   return el;
 }
+
+declare const __BUILD__: string;
+document.querySelector('.brand')?.setAttribute('title', `build ${__BUILD__}`);
 
 const app = document.getElementById('app')!;
 const netSelect = document.getElementById('network') as HTMLSelectElement;
@@ -333,9 +337,13 @@ function settingsView(st: WalletState) {
 }
 
 async function approvalView(id: string, standalone: boolean) {
-  const p = await call<Pending | null>('getPending', { id });
-  if (!p) {
-    show(h('h1', {}, 'Nothing to approve'), h('p', {}, 'This request was answered or expired.'), standalone && h('button', { onclick: () => window.close() }, 'Close'));
+  const p = await call<(Pending & { expired?: boolean }) | null>('getPending', { id });
+  if (!p || p.expired) {
+    show(
+      h('h1', {}, p ? 'This request expired' : 'Nothing to approve'),
+      h('p', {}, p ? `The wallet restarted before you answered, so ${p.origin} is no longer waiting. Go back to the site and try again.` : 'This request was answered or expired.'),
+      standalone && h('button', { onclick: () => window.close() }, 'Close')
+    );
     return;
   }
   const st = await call<WalletState>('state');
@@ -369,12 +377,18 @@ async function approvalView(id: string, standalone: boolean) {
 
 // ---- start -----------------------------------------------------------------------
 
+// While this page is open, an open port (plus a heartbeat) keeps the service
+// worker alive, so a request waiting on the user is not lost to the ~30 s
+// idle stop. For the toolbar popup, closing it also rejects its own requests.
+const uiPort = chrome.runtime.connect({ name: UI_PORT });
+setInterval(() => uiPort.postMessage({ type: 'ping' }), 20_000);
+
+const showError = (e: unknown) => show(h('div', { class: 'blocked' }, (e as Error).message), approveId && h('button', { onclick: () => window.close() }, 'Close'));
 const approveId = /^#approve=([\w-]+)$/.exec(location.hash)?.[1];
 if (approveId) {
   document.body.classList.add('window');
   netSelect.hidden = true;
-  approvalView(approveId, true).catch((e) => show(h('div', { class: 'blocked' }, (e as Error).message), h('button', { onclick: () => window.close() }, 'Close')));
+  approvalView(approveId, true).catch(showError);
 } else {
-  chrome.runtime.connect({ name: 'popup' });
-  main().catch((e) => show(h('div', { class: 'blocked' }, (e as Error).message)));
+  main().catch(showError);
 }

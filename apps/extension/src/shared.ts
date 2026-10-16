@@ -11,8 +11,12 @@ export const WALLET_ICON =
     '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="#16130f"/><path d="M14 50V20l10 9h16l10-9v30a6 6 0 0 1-6 6H20a6 6 0 0 1-6-6z" fill="#f5a524"/><circle cx="26" cy="39" r="3.2" fill="#16130f"/><circle cx="38" cy="39" r="3.2" fill="#16130f"/><path d="M29 46h6l-3 3z" fill="#16130f"/></svg>'
   );
 
-/** Messages a content script sends the background. */
-export type ContentToBackground = { type: 'rpc'; id: string; method: string; params: unknown };
+/** Port names. Each dapp request gets an RPC_PORT; extension pages hold a UI_PORT. */
+export const RPC_PORT = 'ecash-rpc';
+export const UI_PORT = 'ecash-ui';
+
+/** Messages a content script sends the background over an RPC_PORT. */
+export type ContentToBackground = { type: 'rpc'; id: string; method: string; params: unknown } | { type: 'ping' };
 
 /** What the background pushes to tabs. */
 export type BackgroundToContent = { type: 'ecash-event'; targets: string[]; event: unknown };
